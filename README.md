@@ -1,2 +1,2 @@
-# kuzov-calc.github.io
+# kuzov-calc
 Калькулятор для расчета цены ремонта
