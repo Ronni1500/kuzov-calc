@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+  <style>
+      body{
+          font-family: Arial, Helvetica, sans-serif;
+      }
+  .calc-raschot select{
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    position: relative;
+    font-size: 14px;
+    color: #333;
+    font-weight: 400;
+    font-family: Roboto, sans-serif;
+    cursor: pointer;
+    width: 300px;
+  }
+  .radio-type{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;      
+  }
+  .radio-type__field{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+  }
+  .radio-type__field input[type=radio] {
+    display: none;
+  }
+  .radio-type__field label{
+      cursor: pointer;
+  }
+  .radio-type__field label:before {
+        content: '';
+        width: 15px;
+        height: 15px;
+        border: 1px solid #6d6d6d;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    .radio-type__field label.checked:before {
+        border-color: #2d69ca;
+        background-image: url(img/icon-radio.png);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .add-line{
+        border: none;
+        background: none;
+        color:rgb(3, 194, 51);
+        cursor: pointer;
+    }
+    .delete-line{
+        border: none;
+        background: none;
+        color:rgb(238, 34, 34);
+        cursor: pointer;
+    }
+    .ui-slider.ui-slider-horizontal {
+        background: rgb(205, 217, 226);
+        height:12px;
+        border:none;
+    }
+    .ui-slider .ui-slider-range {
+        background: #337AB7;
+        height:12px;
+    }
+
+    .calc-raschot{
+        width: 750px;        
+    }
+    @media (max-width: 750px){
+        .calc-raschot{
+            width: auto;
+        }
+    }
+    .select-type{
+        margin-bottom: 35px;
+    }
+    .calc-title{
+        font-weight: bold;
+        font-size: 18px;
+        padding-bottom: 15px;
+    }
+    .polzunok-wrapp{
+        margin: 10px 0px;
+    }
+    .result-polzunok{
+        padding: 10px 0px;
+    }
+    .type-detail{
+        margin-bottom: 25px;
+    }
+    .line-raschot{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    @media (max-width: 500px){
+        .line-raschot{
+            padding-bottom: 50px;
+        }
+    }
+    p{
+        margin: 0px;
+    }
+    .line-raschot-result{
+        font-size: 12px;
+        color: #6d6d6d;
+    }
+    .line-raschot-result .price{
+        font-weight: bold;
+    }
+    .line-raschot-result{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        height: 70px;
+    }
+    @media (max-width: 500px){
+        .line-raschot-result{
+            height: auto;
+            display: block;
+            width: 100%;
+        }
+    }
+    .line-raschot-result__prices{
+        border-right: 1px solid #50b842;
+        padding-right: 30px;
+    }
+    @media (max-width: 500px){
+        .line-raschot-result__prices{
+            border-right: none;
+            padding-right: 0px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #50b842;
+        }
+    }
+    .line-raschot-result__final{
+        padding-left: 25px;
+    }
+    @media (max-width: 500px){
+        .line-raschot-result__final{
+            padding-left: 0px;
+            padding-top: 15px;
+        }
+    }
+    .line-raschot-result__final .line-price-final span{
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d69ca;
+    }
+    .hidden{
+        opacity: 0;
+        height: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+  </style>
+</head>
+<body>
+<div class="calc-raschot">
+    <div class="select-type">
+        <div class="calc-title">Выберите тип авто</div>
+        <select name="type-car" id="type-car">
+            <option value="0">Выберите класс авто</option>
+            <option value="1">малый класс</option>
+            <option value="2">малый класс</option>
+            <option value="3">средний класс</option>
+            <option value="4">внедорожник</option>
+            <option value="5">минивен</option>
+        </select>
+    </div>
+    <div class="line-raschot main-line-raschot hidden">
+        <div class="line-raschot__left">
+            <div class="type-detail" >
+                <select name="detal">
+                    <option value="0">Выберите деталь</option>
+                    <option value="door">Дверь</option>
+                    <option value="frontWing">Переднее крыло</option>
+                    <option value="rearWing">Заднее крыло</option>
+                    <option value="housecoat">Капот</option>
+                    <option value="roof">Крыша</option>
+                    <option value="frontBumper">Передний бампер</option>
+                    <option value="rearBumper">Задний бампер</option>
+                    <option value="threshold">Порог</option>
+                    <option value="small">Мелкие детали</option>
+                </select>
+            </div>
+            <div class="radio-type hidden">
+                <div class="radio-type__field">
+                    <input type="radio" name="type-work" id="pokraska" checked>
+                    <label for="pokraska" class="checked">Покраска</label>
+                </div>
+                <div class="radio-type__field">
+                    <input type="radio" name="type-work" id="zamena">
+                    <label for="zamena">Замена</label>
+                </div>
+                <div class="radio-type__field">
+                    <input type="radio" name="type-work" id="remont">
+                    <label for="remont">Ремонт</label>
+                </div>
+            </div>
+            
+            <div class="polzunok-wrapp hidden">
+                <div class="polzunok">
+                </div>
+                <div class="result-polzunok" data-result="5"></div>
+            </div>
+        </div>
+        <div class="line-raschot-result hidden">
+            <div class="line-raschot-result__prices"></div>
+            <div class="line-raschot-result__final"></div>
+            <button class="delete-line">Удалить [-]</button>
+        </div>
+    </div>
+    <button class="add-line hidden">Добавить [+]</button>
+    <div class="final-price hidden">Общая стоимость ремонта авто: <span class="final-price__val"></span> руб.</div>
+</div>
+<script>
+$(document).ready(function() {
+    createScroll($(".main-line-raschot"));
+    var type = 0;
+
+    $('#type-car').change(function(){
+        var prev_type = type;
+        var type_car = $(this).val();
+        type = type_car;
+        if(type != prev_type && prev_type != 0){
+            var root = $('.main-line-raschot');
+            $('.main-line-raschot select').val(0);
+            $('.line-raschot').not('.main-line-raschot').remove();
+            root.find('.line-raschot, .radio-type, .polzunok-wrapp, .line-raschot-result').addClass('hidden'); 
+            $('.add-line, .final-price').addClass('hidden');
+            root.find('.line-price-final').attr('data-price',0);
+            refreshScroll(root) 
+            refreshCheckbox(root);
+            getPrices(root);             
+        }
+        if(type_car != '0'){
+            $('.line-raschot').removeClass('hidden');            
+        }else{
+            $('.line-raschot, .add-line, .final-price').addClass('hidden');            
+        }
+    });
+
+    //Определение выбора тип детали
+    $(document).on('change', '.type-detail select',function(){
+        var root = $(this).closest('.line-raschot');
+
+        //Выбрана деталь, показываем нужные поля
+        if($(this).val() != '0'){
+            root.find('.line-raschot, .radio-type, .polzunok-wrapp, .line-raschot-result').removeClass('hidden'); 
+            $('.add-line, .final-price').removeClass('hidden');
+            getPrices(root); 
+        }else{
+            root.find('.line-raschot, .radio-type, .polzunok-wrapp, .line-raschot-result').addClass('hidden'); 
+            $('.add-line, .final-price').addClass('hidden');
+            root.find('.line-price-final').attr('data-price',0);
+            refreshCheckbox(root);
+            refreshScroll(root)
+            finalPrice();
+        }
+               
+    });
+    //Определяем тип ремонта
+    $(document).on('click', '.radio-type label', function(){
+        $(this).closest('.radio-type').find('label').removeClass('checked');
+        $(this).closest('.radio-type').find('input[type="radio"]').removeAttr('checked');
+        $(this).addClass('checked');
+        $(this).parent().find('input[type="radio"]').attr('checked','checked');
+
+        var root = $(this).closest('.line-raschot');
+        getPrices(root); 
+    });
+
+    //Добавление линии расчета
+    $('.add-line').click(function(){
+        var main_line = $('.main-line-raschot').html();
+        var count_line = $('.line-raschot').length;
+        $('.line-raschot:eq('+ (count_line - 1) +')').after('<div class="line-raschot" >' + main_line + '</div>').slideDown(500);
+        $('.line-raschot:eq('+ (count_line) +')').find('.line-raschot-result .line-raschot-result__prices, .line-raschot-result .line-raschot-result__final').html('');
+        
+        //Сброс чекбоксов
+        refreshCheckbox($('.line-raschot:eq('+ (count_line) +')'));
+        //Пересоздание ползунка
+        $('.line-raschot:eq('+ (count_line) +')').find('.polzunok-wrapp').remove();
+        $('.line-raschot:eq('+ (count_line) +')').
+            find('.radio-type').
+            after('<div class="polzunok-wrapp"><div class="polzunok"></div><div class="result-polzunok" data-result="5"></div>');
+        createScroll($('.line-raschot:eq('+ (count_line) +')'));  
+
+        //Убираем поля до выбора
+        $('.line-raschot:eq('+ (count_line) +')').find('.line-raschot, .radio-type, .polzunok-wrapp, .line-raschot-result').addClass('hidden');
+        $('.add-line').addClass('hidden');
+    });
+    //Удаление линии расчета
+    $(document).on( 'click','.delete-line', function(){
+        var root = $(this).closest('.line-raschot');
+        var count_line = $('.line-raschot').length;
+                
+        if(root.hasClass('main-line-raschot') && count_line > 1){
+            root.remove();
+            $('.line-raschot:eq(0)').addClass('main-line-raschot');
+        }
+        else if(root.hasClass('main-line-raschot') && count_line == 1){
+            $('.line-price-final').attr('data-price',0);
+            $('.main-line-raschot select').val(0);
+            root.find('.line-raschot, .radio-type, .polzunok-wrapp, .line-raschot-result').addClass('hidden'); 
+            $('.add-line, .final-price').addClass('hidden');
+                        
+            refreshScroll(root); 
+            refreshCheckbox(root);
+            getPrices(root);
+        }
+        else{
+            root.remove(); 
+        }
+        finalPrice();
+    })
+
+
+
+
+
+    /*FUNCTIONS*/
+    //Сброс чекбоксов
+    function refreshCheckbox ($root){
+        $root.find('.radio-type label').removeClass('checked');
+        $root.find('.radio-type input[type="radio"]').removeAttr('checked');
+        $root.find('.radio-type label:eq(0)').addClass('checked');
+        $root.find('.radio-type input[type="radio"]:eq(0)').attr('checked','checked');
+    }
+    //Пересоздание ползунка
+    function refreshScroll($root){
+        $root.find('.polzunok').slider("destroy");
+        createScroll($root); 
+    }
+    //Вывод цены линии расчета
+    function insertPrice($element, obj,plus, name){
+    let price = 0;
+    if(obj != undefined){
+        price = (plus > 5) ? obj.price + (plus * obj.plus) : obj.price;
+        $element.
+            find('.line-raschot-result .line-raschot-result__prices').
+            append('<p>'+name+': <span class="price">'+price+'</span> руб.</p>');
+    }
+    return price;
+    }
+    //Получаем цену исходя из опций
+    function getPrices($root){
+        var type_work = $root.find('.radio-type label.checked').attr('for');
+        var val = $root.find('.type-detail select option:selected').val();
+        var plus = $root.find('.result-polzunok').attr('data-result');
+        if(val == 0 || type == 0) return false;
+        var check_prices = list_price[type][val][type_work];
+        var final_price = 0;
+
+        $root.find('.line-raschot-result .line-raschot-result__prices').html('');
+        $root.find('.line-raschot-result .line-raschot-result__final').html('');
+
+        final_price += insertPrice($root, check_prices.pokraska, plus, 'Покраска');
+        final_price += insertPrice($root, check_prices.material, plus, 'Материалы');
+        final_price += insertPrice($root, check_prices.remont, plus, 'Ремонт');
+        final_price += insertPrice($root, check_prices.arm_work, plus, 'Арматурные работы');
+        if(final_price != 0){
+            $root.
+                find('.line-raschot-result .line-raschot-result__final').
+                html('<p class="line-price-final" data-price="'+final_price+'">Итог:<br> <span>'+final_price+' руб.<span></p>');
+        }
+        finalPrice();
+    }
+    //Пересчет финальной цены
+    function finalPrice(){
+        var f_price = 0;
+        $('.line-price-final').each(function(i, e){   
+            f_price += Number($(e).attr('data-price'));
+        });    
+        $('.final-price .final-price__val').html(f_price);
+        return f_price;
+    }
+    //Создание ползунка
+    function createScroll ($element){
+        $element.find('.polzunok').slider({
+            animate: "slow",
+            range: "min",
+            value: 5,
+            min: 5, 
+            step: 5,   
+            value: 0,
+            slide: function(event, ui){
+                $element.find('.result-polzunok').text(ui.value + '%');
+                $element.find('.result-polzunok').attr('data-result',ui.value);
+                
+                var root = $(this).closest('.line-raschot');
+                getPrices(root); 
+            }
+        });  
+        $element.find('.result-polzunok').attr('data-result',$element.find('.polzunok').slider("value"));
+        $element.find('.result-polzunok').text($element.find('.polzunok').slider("value")+ '%'); 
+    }
+    function randomInteger(min, max) {
+        // получить случайное число от (min-0.5) до (max+0.5)
+        let rand = min - 0.5 + Math.random() * (max - min + 1);
+        return Math.round(rand);
+    }
+
+    //Тестовые данные
+    var list_price = {};
+    var list_services = [
+            'door',
+            'frontWing',
+            'rearWing',
+            'housecoat',
+            'roof',
+            'frontBumper',
+            'rearBumper',
+            'threshold',
+            'small',
+    ];
+    var list_type = ['remont', 'zamena','pokraska'];
+    
+    for(var i = 1; i < 6; i++){
+        list_price[i] = {};
+        list_services.forEach(service => {
+            // console.log(service);      
+            list_price[i][service] = {}; 
+            list_type.forEach(type => {
+                list_price[i][service][type] = {
+                    'pokraska' : {
+                        'price': randomInteger(100, 10000),
+                        'plus' : randomInteger(10, 1000)
+                    },
+                    'material' : {
+                        'price': randomInteger(100, 10000),
+                        'plus' : randomInteger(10, 1000)
+                    },                                        
+                    'arm_work' : {
+                        'price': randomInteger(100, 10000),
+                        'plus' : randomInteger(10, 1000)
+                    }
+                };
+                if(type == 'remont'){
+                    list_price[i][service][type]['remont'] = {
+                        'price': randomInteger(100, 10000),
+                        'plus' : randomInteger(10, 1000)
+                    };
+                }
+            });    
+        });
+
+    }
+console.log(list_price);
+   
+    
+    var list_price_1 = {
+        '1': {
+            'door' : {
+                'remont' : {
+                    'pokraska' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'material' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'remont' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'arm_work' : {
+                        'price': 100,
+                        'plus' : 10
+                    }
+                },
+                'zamena' : {
+                    'pokraska' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'material' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'arm_work' : {
+                        'price': 100,
+                        'plus' : 10
+                    }
+                },
+                'pokraska' : {
+                    'pokraska' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'material' : {
+                        'price': 100,
+                        'plus' : 10
+                    },
+                    'arm_work' : {
+                        'price': 100,
+                        'plus' : 10
+                    }
+                }
+            },
+            'frontWing' : {},
+            'rearWing' : {},
+            'housecoat' : {},
+            'roof' : {},
+            'frontBumper' : {},
+            'rearBumper' : {},
+            'threshold' : {},
+            'small' : {}
+        },
+        '2': {
+            'door' : {},
+            'frontWing' : {},
+            'rearWing' : {},
+            'housecoat' : {},
+            'roof' : {},
+            'frontBumper' : {},
+            'rearBumper' : {},
+            'threshold' : {},
+            'small' : {}
+        }
+        ,
+        '3': {
+            'door' : {},
+            'frontWing' : {},
+            'rearWing' : {},
+            'housecoat' : {},
+            'roof' : {},
+            'frontBumper' : {},
+            'rearBumper' : {},
+            'threshold' : {},
+            'small' : {}
+        }
+        ,
+        '4': {
+            'door' : {},
+            'frontWing' : {},
+            'rearWing' : {},
+            'housecoat' : {},
+            'roof' : {},
+            'frontBumper' : {},
+            'rearBumper' : {},
+            'threshold' : {},
+            'small' : {}
+        }
+        ,
+        '5': {
+            'door' : {},
+            'frontWing' : {},
+            'rearWing' : {},
+            'housecoat' : {},
+            'roof' : {},
+            'frontBumper' : {},
+            'rearBumper' : {},
+            'threshold' : {},
+            'small' : {}
+        }
+    };
+});
+</script>
+</body>
+</html>
